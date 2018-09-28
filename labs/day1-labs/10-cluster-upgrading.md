@@ -6,6 +6,8 @@ Azure Container Service (AKS) makes it easy to perform common management tasks i
 
 Before upgrading a cluster, use the `az aks get-upgrades` command to check which Kubernetes releases are available for upgrade.
 
+*NOTE:  This operation could take ~1 hour*
+
 ```azurecli-interactive
 az aks get-upgrades --name $CLUSTER_NAME --resource-group $NAME --output table
 ```
@@ -13,15 +15,15 @@ az aks get-upgrades --name $CLUSTER_NAME --resource-group $NAME --output table
 Output:
 
 ```console
-Name     ResourceGroup    MasterVersion    MasterUpgrades       NodePoolVersion     NodePoolUpgrades
--------  ---------------  ---------------  -------------------  ------------------  -------------------
-default  myResourceGroup  1.7.7            1.8.2, 1.7.9, 1.8.1  1.7.7               1.8.2, 1.7.9, 1.8.1
+Name     ResourceGroup    MasterVersion    NodePoolVersion       Upgrades
+-------  ---------------  ---------------  -------------------  -------------------
+default  myResourceGroup  1.11.1           1.11.1               1.11.2
 ```
 
-We have three versions available for upgrade: 1.7.9, 1.8.1 and 1.8.2. We can use the `az aks upgrade` command to upgrade to the latest available version.  During the upgrade process, nodes are carefully [cordoned and drained][kubernetes-drain] to minimize disruption to running applications.  Before initiating a cluster upgrade, ensure that you have enough additional compute capacity to handle your workload as cluster nodes are added and removed.
+In this case, we have one version available for upgrade: 1.11.2. We can use the `az aks upgrade` command to upgrade to the latest available version.  During the upgrade process, nodes are carefully [cordoned and drained][kubernetes-drain] to minimize disruption to running applications.  Before initiating a cluster upgrade, ensure that you have enough additional compute capacity to handle your workload as cluster nodes are added and removed.
 
 ```azurecli-interactive
-az aks upgrade --name $CLUSTER_NAME --resource-group $NAME --kubernetes-version 1.8.2
+az aks upgrade --name $CLUSTER_NAME --resource-group $NAME --kubernetes-version 1.11.2
 ```
 
 Output:
@@ -56,7 +58,7 @@ Output:
     ],
     "dnsPrefix": "myK8sClust-myResourceGroup-4f48ee",
     "fqdn": "myk8sclust-myresourcegroup-4f48ee-406cc140.hcp.eastus.azmk8s.io",
-    "kubernetesVersion": "1.8.2",
+    "kubernetesVersion": "1.11.2",
     "linuxProfile": {
       "adminUsername": "azureuser",
       "ssh": {
@@ -91,7 +93,7 @@ Output:
 ```json
 Name          Location    ResourceGroup    KubernetesVersion    ProvisioningState    Fqdn
 ------------  ----------  ---------------  -------------------  -------------------  ----------------------------------------------------------------
-myK8sCluster  eastus     myResourceGroup  1.8.2                Succeeded            myk8sclust-myresourcegroup-3762d8-2f6ca801.hcp.eastus.azmk8s.io
+myK8sCluster  eastus     myResourceGroup  1.11.2                Succeeded            myk8sclust-myresourcegroup-3762d8-2f6ca801.hcp.eastus.azmk8s.io
 ```
 
 ## Attribution:
